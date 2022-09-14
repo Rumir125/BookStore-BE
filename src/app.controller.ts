@@ -11,8 +11,8 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  @Get('/books')
-  getBooks(): BooksResponse[] {
-    return this.appService.getBooks();
-  }
+  // @Get('/books')
+  // getBooks(): BooksResponse[] {
+  //   return this.appService.getBooks();
+  // }
 }

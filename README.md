@@ -71,3 +71,11 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+## Docker
+
+# Windows users need to have Docker Desktop installed
+
+You can run the application by simply running:
+
+$ docker-compose up
