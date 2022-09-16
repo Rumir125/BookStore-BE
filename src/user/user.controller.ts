@@ -17,14 +17,21 @@ export class UserController {
   @Get()
   public async getUsers(): Promise<UserResponse[]> {
     const res = await this.userService.findAll();
+    console.log(res);
     return res.map((item) => ({
       firstName: item.firstName,
       lastName: item.lastName,
+      books: item.books,
     }));
   }
 
   @Get(':id')
   public async getUserById(@Param('id') userId: number): Promise<UserResponse> {
     return this.userService.findOne(userId);
+  }
+
+  @Post('/signin')
+  public async signIn(@Body() userRequest: UserRequest) {
+    return this.userService.checkPassword(userRequest);
   }
 }

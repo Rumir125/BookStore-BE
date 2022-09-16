@@ -76,6 +76,8 @@ Nest is [MIT licensed](LICENSE).
 
 # Windows users need to have Docker Desktop installed
 
-You can run the application by simply running:
+You can run the application using following steps:
+
+$ npm install
 
 $ docker-compose up

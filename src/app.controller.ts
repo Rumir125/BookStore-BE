@@ -10,9 +10,4 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
-
-  // @Get('/books')
-  // getBooks(): BooksResponse[] {
-  //   return this.appService.getBooks();
-  // }
 }

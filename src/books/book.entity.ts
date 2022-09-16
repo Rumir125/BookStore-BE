@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { Exclude, Expose } from 'class-transformer';
+import { User } from 'src/model/user.entity';
 
 @Entity()
 export class Book {
@@ -18,6 +19,10 @@ export class Book {
   @Column()
   @Expose()
   year: number;
+
+  @Expose()
+  @ManyToOne(() => User, (user) => user.books)
+  user: User;
 
   constructor(partial: Partial<Book>) {
     Object.assign(this, partial);
