@@ -8,7 +8,7 @@ export class User {
   @Expose()
   id: number;
 
-  @Column({ nullable: true })
+  @Column()
   @Expose()
   username: string;
 

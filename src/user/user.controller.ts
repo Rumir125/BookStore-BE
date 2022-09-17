@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { UserRequest } from 'src/interface/request/user-request';
 import { UserResponse } from 'src/interface/response/user-response';
 import { UserService } from './user.service';
@@ -17,11 +26,11 @@ export class UserController {
   @Get()
   public async getUsers(): Promise<UserResponse[]> {
     const res = await this.userService.findAll();
-    console.log(res);
     return res.map((item) => ({
       firstName: item.firstName,
       lastName: item.lastName,
       books: item.books,
+      id: item.id,
     }));
   }
 
@@ -30,8 +39,10 @@ export class UserController {
     return this.userService.findOne(userId);
   }
 
-  @Post('/signin')
-  public async signIn(@Body() userRequest: UserRequest) {
-    return this.userService.checkPassword(userRequest);
+  @UseGuards(JwtAuthGuard)
+  @Delete('/:userId')
+  public async deleteUser(@Param('userId') userId: number) {
+    await this.userService.removeUser(userId);
+    return 'User Deleted successfully';
   }
 }

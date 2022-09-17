@@ -21,7 +21,7 @@ export class Book {
   year: number;
 
   @Expose()
-  @ManyToOne(() => User, (user) => user.books)
+  @ManyToOne(() => User, (user) => user.books, { onDelete: 'CASCADE' })
   user: User;
 
   constructor(partial: Partial<Book>) {

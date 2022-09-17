@@ -21,12 +21,12 @@ export class UserService {
     return this.usersRepository.findOneBy({ id });
   }
 
-  getUser(firstName, lastName): Promise<User> {
-    return this.usersRepository.findOneBy({ firstName, lastName });
+  getUser(username: string): Promise<User> {
+    return this.usersRepository.findOneBy({ username });
   }
 
-  async remove(id: string): Promise<void> {
-    await this.usersRepository.delete(id);
+  async removeUser(id: number) {
+    return this.usersRepository.delete(id);
   }
 
   async createUser(request: UserRequest) {
@@ -35,23 +35,5 @@ export class UserService {
     const hash = await bcrypt.hash(password, saltOrRounds);
 
     return this.usersRepository.save({ ...request, password: hash });
-  }
-
-  async checkPassword(userRequest: UserRequest) {
-    const user = await this.usersRepository.findOneBy({
-      firstName: userRequest.firstName,
-      lastName: userRequest.lastName,
-    });
-
-    if (!user) {
-      return "User doesn't exist";
-    }
-    const isMatch = await bcrypt.compare(userRequest.password, user.password);
-
-    if (isMatch) {
-      return 'You are logged in successfully';
-    } else {
-      return 'Authentication Failed';
-    }
   }
 }
