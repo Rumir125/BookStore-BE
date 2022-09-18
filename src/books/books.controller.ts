@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -25,6 +26,12 @@ export class BooksController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('/user/:id')
+  public async getUserBooks(@Param('id') userId: any): Promise<Book[]> {
+    return this.booksService.getUserBooks(userId);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Post()
   public async createBook(
     @Body() bookRequest: BookRequest,
@@ -34,9 +41,24 @@ export class BooksController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('/:id')
+  public async getBook(@Param('id') bookId: number): Promise<Book> {
+    return this.booksService.getBook(bookId);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Delete('/:bookId')
   public async deleteBook(@Param('bookId') bookId: number) {
     await this.booksService.deleteBook(bookId);
     return 'Book successfully deleted';
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put('/:id')
+  public async updateBook(
+    @Param('bookId') bookId: number,
+    @Body() bookRequest: BookRequest,
+  ) {
+    return this.booksService.updateBook(bookId, bookRequest);
   }
 }

@@ -4,7 +4,7 @@ import { User } from 'src/model/user.entity';
 
 @Entity()
 export class Book {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   @Exclude()
   id: number;
 
