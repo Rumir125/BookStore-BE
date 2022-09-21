@@ -5,7 +5,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { User } from './model/user.entity';
 import { UserModule } from './user/user.module';
-import { BooksService } from './books/books.service';
 import { BooksModule } from './books/books.module';
 import { Book } from './books/book.entity';
 import { AuthModule } from './auth/auth.module';
@@ -14,6 +13,7 @@ import { AuthModule } from './auth/auth.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
+      // host is postgres when running with Docker, otherwise use 'localhost'
       host: 'postgres',
       port: Number(process.env.DB_PORT),
       username: process.env.DB_USERNAME,

@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Exclude, Expose } from 'class-transformer';
-import { Book } from 'src/books/book.entity';
+import { Book } from '../books/book.entity';
 
 @Entity()
 export class User {
@@ -8,7 +8,7 @@ export class User {
   @Expose()
   id: number;
 
-  @Column()
+  @Column({ default: 'testUser' })
   @Expose()
   username: string;
 

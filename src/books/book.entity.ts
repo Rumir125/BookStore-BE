@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { Exclude, Expose } from 'class-transformer';
-import { User } from 'src/model/user.entity';
+import { User } from '../model/user.entity';
 
 @Entity()
 export class Book {
@@ -19,6 +19,9 @@ export class Book {
   @Column()
   @Expose()
   year: number;
+
+  @Column({ array: true, default: [] })
+  genres: string;
 
   @Expose()
   @ManyToOne(() => User, (user) => user.books, { onDelete: 'CASCADE' })

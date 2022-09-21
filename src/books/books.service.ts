@@ -1,8 +1,12 @@
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BookRequest } from 'src/interface/request/book-request';
-import { User } from 'src/model/user.entity';
-import { UserService } from 'src/user/user.service';
+import { BookRequest } from '../interface/request/book-request';
+import { UserService } from '../user/user.service';
 import { Repository, UpdateResult } from 'typeorm';
 import { Book } from './book.entity';
 
@@ -24,7 +28,14 @@ export class BooksService {
     return this.booksRepository.save({ ...data, user });
   }
 
-  async deleteBook(id) {
+  async deleteBook(id, userId) {
+    const user = await this.userService.findOne(userId);
+    const book = await this.booksRepository.findOneBy({ id, user });
+    console.log(book, 'aaaa');
+    if (!book) {
+      throw new UnauthorizedException();
+    }
+
     return this.booksRepository.delete(id);
   }
 
@@ -40,8 +51,13 @@ export class BooksService {
   async updateBook(
     bookId: number,
     bookRequest: BookRequest,
+    userId,
   ): Promise<UpdateResult> {
-    const book = await this.booksRepository.findOneBy({ id: bookId });
+    const user = await this.userService.findOne(userId);
+    const book = await this.booksRepository.findOneBy({ id: bookId, user });
+    if (!book) {
+      throw new UnauthorizedException();
+    }
     return this.booksRepository.update(book, bookRequest);
   }
 }

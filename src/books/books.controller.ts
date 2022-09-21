@@ -8,10 +8,10 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { User } from 'src/decorators/user.decorator';
-import { BookRequest } from 'src/interface/request/book-request';
-import { BooksResponse } from 'src/interface/response/books-response';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { User } from '../decorators/user.decorator';
+import { BookRequest } from '../interface/request/book-request';
+import { BooksResponse } from '../interface/response/books-response';
 import { Book } from './book.entity';
 import { BooksService } from './books.service';
 
@@ -48,17 +48,18 @@ export class BooksController {
 
   @UseGuards(JwtAuthGuard)
   @Delete('/:bookId')
-  public async deleteBook(@Param('bookId') bookId: number) {
-    await this.booksService.deleteBook(bookId);
+  public async deleteBook(@Param('bookId') bookId: number, @User() user) {
+    await this.booksService.deleteBook(bookId, user.id);
     return 'Book successfully deleted';
   }
 
   @UseGuards(JwtAuthGuard)
   @Put('/:id')
   public async updateBook(
-    @Param('bookId') bookId: number,
+    @Param('id') bookId: number,
     @Body() bookRequest: BookRequest,
+    @User() user,
   ) {
-    return this.booksService.updateBook(bookId, bookRequest);
+    return this.booksService.updateBook(bookId, bookRequest, user.id);
   }
 }

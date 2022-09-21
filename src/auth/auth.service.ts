@@ -1,9 +1,12 @@
-import { Injectable, NotAcceptableException } from '@nestjs/common';
-import { UserService } from 'src/user/user.service';
+import {
+  Injectable,
+  NotAcceptableException,
+  NotFoundException,
+} from '@nestjs/common';
+import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { UserRequest } from 'src/interface/request/user-request';
-import { LoginRequest } from 'src/interface/request/login-request';
+import { LoginRequest } from '../interface/request/login-request';
 
 @Injectable()
 export class AuthService {
@@ -24,10 +27,15 @@ export class AuthService {
     return null;
   }
   async login(loginRequest: LoginRequest) {
-    const user = await this.validateUser(
+    let user;
+    user = await this.validateUser(
       loginRequest.username,
       loginRequest.password,
     );
+
+    if (!user) {
+      throw new NotFoundException('Username or password is not correct');
+    }
     const payload = {
       firstName: user.firstName,
       lastName: user.lastName,
@@ -35,9 +43,6 @@ export class AuthService {
       id: user.id,
     };
 
-    if (!user) {
-      return 'Authentication failed';
-    }
     return {
       access_token: this.jwtService.sign(payload),
     };

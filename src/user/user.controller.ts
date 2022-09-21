@@ -7,9 +7,9 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { UserRequest } from 'src/interface/request/user-request';
-import { UserResponse } from 'src/interface/response/user-response';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { UserRequest } from '../interface/request/user-request';
+import { UserResponse } from '../interface/response/user-response';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -31,6 +31,7 @@ export class UserController {
       lastName: item.lastName,
       books: item.books,
       id: item.id,
+      username: item.username,
     }));
   }
 
