@@ -23,6 +23,9 @@ export class Book {
   @Column({ array: true, default: [] })
   genres: string;
 
+  @Column({ default: '' })
+  description: string;
+
   @Expose()
   @ManyToOne(() => User, (user) => user.books, { onDelete: 'CASCADE' })
   user: User;

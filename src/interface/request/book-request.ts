@@ -3,4 +3,5 @@ export interface BookRequest {
   author: string;
   year: number;
   genres: string;
+  description: string;
 }

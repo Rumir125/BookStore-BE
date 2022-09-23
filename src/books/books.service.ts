@@ -31,7 +31,6 @@ export class BooksService {
   async deleteBook(id, userId) {
     const user = await this.userService.findOne(userId);
     const book = await this.booksRepository.findOneBy({ id, user });
-    console.log(book, 'aaaa');
     if (!book) {
       throw new UnauthorizedException();
     }
@@ -44,8 +43,15 @@ export class BooksService {
   }
 
   async getUserBooks(userId: number) {
-    const user = await this.userService.findOne(userId);
-    return this.booksRepository.findBy({ user });
+    return (
+      this.booksRepository
+        .createQueryBuilder('book')
+        .where('book.user = :user')
+        .setParameter('user', userId)
+        .leftJoinAndSelect('book.user', 'user')
+        // .select('user.id')
+        .getMany()
+    );
   }
 
   async updateBook(
