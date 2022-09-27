@@ -28,7 +28,7 @@ export class User {
   @Exclude()
   password: string;
 
-  @Column({ default: 'regular' })
+  @Column()
   @Exclude()
   role: string;
 
