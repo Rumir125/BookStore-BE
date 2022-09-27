@@ -14,11 +14,11 @@ import { AuthModule } from './auth/auth.module';
     TypeOrmModule.forRoot({
       type: 'postgres',
       // host is postgres when running with Docker, otherwise use 'localhost'
-      // host: process.env.DB_HOST,
-      // port: Number(process.env.DB_PORT),
-      // username: process.env.DB_USERNAME,
-      // password: process.env.DB_PASSWORD,
-      // database: process.env.DB_NAME,
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
       entities: [User, Book],
       synchronize: true,
       url: process.env.DB_URI,
