@@ -74,7 +74,7 @@ Nest is [MIT licensed](LICENSE).
 
 ## Docker
 
-# Windows users need to have Docker Desktop installed
+## Windows users need to have Docker Desktop installed
 
 You can run the application using following steps:
 
@@ -82,6 +82,6 @@ $ npm install
 
 $ docker-compose up
 
-# If not running on docker, you need to setup a postgres database and change host to `localhost` in app.module.ts nad then run:
+## If not running on docker, you need to setup a postgres database and change host to `localhost` in app.module.ts nad then run:
 
 $ npm run start:dev
