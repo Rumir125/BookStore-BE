@@ -27,8 +27,7 @@ export class AuthService {
     return null;
   }
   async login(loginRequest: LoginRequest) {
-    let user;
-    user = await this.validateUser(
+    const user = await this.validateUser(
       loginRequest.username,
       loginRequest.password,
     );
@@ -41,6 +40,7 @@ export class AuthService {
       lastName: user.lastName,
       username: user.username,
       id: user.id,
+      role: user.role,
     };
 
     return {

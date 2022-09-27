@@ -28,6 +28,10 @@ export class User {
   @Exclude()
   password: string;
 
+  @Column({ default: 'regular' })
+  @Exclude()
+  role: string;
+
   @OneToMany(() => Book, (book) => book.user)
   @Expose()
   books: Book[];

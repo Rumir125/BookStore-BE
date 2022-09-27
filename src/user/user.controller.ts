@@ -7,6 +7,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { User } from 'src/decorators/user.decorator';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { UserRequest } from '../interface/request/user-request';
 import { UserResponse } from '../interface/response/user-response';
@@ -42,8 +43,8 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Delete('/:userId')
-  public async deleteUser(@Param('userId') userId: number) {
-    await this.userService.removeUser(userId);
+  public async deleteUser(@Param('userId') userId: number, @User() user) {
+    await this.userService.removeUser(userId, user);
     return 'User Deleted successfully';
   }
 }

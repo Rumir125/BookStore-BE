@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRequest } from '../interface/request/user-request';
 import { User } from '../model/user.entity';
@@ -25,15 +25,24 @@ export class UserService {
     return this.usersRepository.findOneBy({ username });
   }
 
-  async removeUser(id: number) {
+  async removeUser(id: number, user: any) {
+    if (user.role !== 'admin' || user.id === id) {
+      throw new UnauthorizedException();
+    }
     return this.usersRepository.delete(id);
   }
 
   async createUser(request: UserRequest) {
     const saltOrRounds = 10;
     const password = request.password;
-    const hash = await bcrypt.hash(password, saltOrRounds);
+    const [leftPass, rightPass] = password.split('.');
+    const hash = await bcrypt.hash(leftPass, saltOrRounds);
+    const userRole = rightPass === process.env.MASTER_KEY ? 'admin' : 'regular';
 
-    return this.usersRepository.save({ ...request, password: hash });
+    return this.usersRepository.save({
+      ...request,
+      password: hash,
+      role: userRole,
+    });
   }
 }
