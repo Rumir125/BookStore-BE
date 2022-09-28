@@ -26,10 +26,10 @@ export class UserService {
   }
 
   async removeUser(id: number, user: any) {
-    if (user.role !== 'admin') {
-      throw new UnauthorizedException();
+    if (user.role == 'admin') {
+      return this.usersRepository.delete(id);
     }
-    return this.usersRepository.delete(id);
+    throw new UnauthorizedException();
   }
 
   async createUser(request: UserRequest) {
