@@ -33,6 +33,7 @@ export class UserController {
       books: item.books,
       id: item.id,
       username: item.username,
+      role: item.role,
     }));
   }
 
