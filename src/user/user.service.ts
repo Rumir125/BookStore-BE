@@ -26,7 +26,7 @@ export class UserService {
   }
 
   async removeUser(id: number, user: any) {
-    if (user.role !== 'admin' || user.id === id) {
+    if (user.role !== 'admin') {
       throw new UnauthorizedException();
     }
     return this.usersRepository.delete(id);
