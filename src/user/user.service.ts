@@ -35,9 +35,8 @@ export class UserService {
   async createUser(request: UserRequest) {
     const saltOrRounds = 10;
     const password = request.password;
-    const [leftPass, rightPass] = password.split('.');
-    const hash = await bcrypt.hash(leftPass, saltOrRounds);
-    const userRole = rightPass === process.env.MASTER_KEY ? 'admin' : 'regular';
+    const hash = await bcrypt.hash(password, saltOrRounds);
+    const userRole = password === process.env.MASTER_KEY ? 'admin' : 'regular';
 
     return this.usersRepository.save({
       ...request,
