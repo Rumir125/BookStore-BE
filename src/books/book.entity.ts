@@ -5,7 +5,7 @@ import { User } from '../model/user.entity';
 @Entity()
 export class Book {
   @PrimaryGeneratedColumn('uuid')
-  @Exclude()
+  @Expose()
   id: number;
 
   @Column()
@@ -21,9 +21,11 @@ export class Book {
   year: number;
 
   @Column({ array: true, default: [] })
+  @Expose()
   genres: string;
 
   @Column({ default: '' })
+  @Expose()
   description: string;
 
   @Expose()

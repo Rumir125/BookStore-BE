@@ -1,10 +1,14 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserRequest } from '../interface/request/user-request';
 import { User } from '../model/user.entity';
 import { Repository } from 'typeorm';
 
 import * as bcrypt from 'bcrypt';
+import { UserRequest } from '../dtos/user-requst.dto';
 
 @Injectable()
 export class UserService {
@@ -14,7 +18,7 @@ export class UserService {
   ) {}
 
   findAll(): Promise<User[]> {
-    return this.usersRepository.find({ relations: ['books'] });
+    return this.usersRepository.find();
   }
 
   findOne(id: number): Promise<User> {
@@ -33,6 +37,12 @@ export class UserService {
   }
 
   async createUser(request: UserRequest) {
+    const user = await this.usersRepository.findOneBy({
+      username: request.username,
+    });
+    if (user) {
+      throw new BadRequestException('User exists already');
+    }
     const saltOrRounds = 10;
     const password = request.password;
     const hash = await bcrypt.hash(password, saltOrRounds);

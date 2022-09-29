@@ -7,15 +7,18 @@ import {
   Post,
   Put,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
+import { SerializeInterceptor } from '../interceptors/serialize.interceptor';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { User } from '../decorators/user.decorator';
-import { BookRequest } from '../interface/request/book-request';
-import { BooksResponse } from '../interface/response/books-response';
 import { Book } from './book.entity';
 import { BooksService } from './books.service';
+import { BookResponseDto } from '../dtos/book-response.dto';
+import { BookRequest } from '../dtos/book-request.dto';
 
 @Controller('books')
+@UseInterceptors(new SerializeInterceptor(BookResponseDto))
 export class BooksController {
   public constructor(private booksService: BooksService) {}
 
@@ -36,13 +39,13 @@ export class BooksController {
   public async createBook(
     @Body() bookRequest: BookRequest,
     @User() user,
-  ): Promise<BooksResponse> {
+  ): Promise<Book> {
     return this.booksService.createBook(bookRequest, user.id);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('/:id')
-  public async getBook(@Param('id') bookId: number): Promise<Book> {
+  public async getBook(@Param('id') bookId: number): Promise<BookResponseDto> {
     return this.booksService.getBook(bookId);
   }
 

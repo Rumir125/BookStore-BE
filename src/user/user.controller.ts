@@ -6,14 +6,18 @@ import {
   Param,
   Post,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { User } from '../decorators/user.decorator';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { UserRequest } from '../interface/request/user-request';
 import { UserResponse } from '../interface/response/user-response';
 import { UserService } from './user.service';
+import { SerializeInterceptor } from '../interceptors/serialize.interceptor';
+import { UserDto } from '../dtos/user.dto';
+import { UserRequest } from '../dtos/user-requst.dto';
 
 @Controller('user')
+@UseInterceptors(new SerializeInterceptor(UserDto))
 export class UserController {
   public constructor(private userService: UserService) {}
 
@@ -26,15 +30,7 @@ export class UserController {
 
   @Get()
   public async getUsers(): Promise<UserResponse[]> {
-    const res = await this.userService.findAll();
-    return res.map((item) => ({
-      firstName: item.firstName,
-      lastName: item.lastName,
-      books: item.books,
-      id: item.id,
-      username: item.username,
-      role: item.role,
-    }));
+    return this.userService.findAll();
   }
 
   @Get(':id')

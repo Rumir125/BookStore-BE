@@ -1,9 +1,4 @@
-import {
-  Inject,
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BookRequest } from '../interface/request/book-request';
 import { UserService } from '../user/user.service';
@@ -39,7 +34,12 @@ export class BooksService {
   }
 
   getBook(bookId: number): Promise<Book> {
-    return this.booksRepository.findOneBy({ id: bookId });
+    return this.booksRepository
+      .createQueryBuilder('book')
+      .where('book.id = :bookId')
+      .setParameter('bookId', bookId)
+      .leftJoinAndSelect('book.user', 'user')
+      .getOne();
   }
 
   async getUserBooks(userId: number) {
