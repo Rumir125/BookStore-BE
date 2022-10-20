@@ -28,6 +28,10 @@ export class Book {
   @Expose()
   description: string;
 
+  @Column({ default: '' })
+  @Expose()
+  photoUrl: string;
+
   @Expose()
   @ManyToOne(() => User, (user) => user.books, { onDelete: 'CASCADE' })
   user: User;

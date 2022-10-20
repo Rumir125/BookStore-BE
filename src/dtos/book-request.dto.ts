@@ -26,4 +26,8 @@ export class BookRequest {
   @IsOptional()
   @MaxLength(500)
   public description: string;
+
+  @IsOptional()
+  @MaxLength(200)
+  public photoUrl: string;
 }

@@ -21,5 +21,8 @@ export class BookResponseDto {
   description: string;
 
   @Expose()
+  photoUrl: string;
+
+  @Expose()
   user: UserDto;
 }
