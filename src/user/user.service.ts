@@ -37,6 +37,12 @@ export class UserService {
   }
 
   async createUser(request: UserRequest) {
+    const numOfUsers = await this.usersRepository.count();
+
+    if (numOfUsers > 9) {
+      throw new BadRequestException('User limit reached!');
+    }
+
     const user = await this.usersRepository.findOneBy({
       username: request.username,
     });

@@ -1,4 +1,9 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BookRequest } from '../interface/request/book-request';
 import { UserService } from '../user/user.service';
@@ -20,6 +25,12 @@ export class BooksService {
 
   async createBook(data: BookRequest, userId: number): Promise<Book> {
     const user = await this.userService.findOne(userId);
+
+    const userBooks = await this.getUserBooks(user.id);
+    if (userBooks.length > 9) {
+      throw new BadRequestException('Books limit reached!');
+    }
+
     return this.booksRepository.save({ ...data, user });
   }
 
