@@ -19,18 +19,18 @@ export class BooksService {
     private userService: UserService,
   ) {}
 
-  findAll(): Promise<Book[]> {
-    return this.booksRepository.find({ relations: ['user'] });
+  async findAll(itemsPerPage: number, page: string): Promise<Book[]> {
+    const skip = Number(page);
+    const take = Number(itemsPerPage);
+    return this.booksRepository.find({ take: take, skip: skip });
   }
 
   async createBook(data: BookRequest, userId: number): Promise<Book> {
     const user = await this.userService.findOne(userId);
-
-    const userBooks = await this.getUserBooks(user.id);
-    if (userBooks.length > 9) {
+    const numOfBooks = await this.booksRepository.count();
+    if (numOfBooks > 20) {
       throw new BadRequestException('Books limit reached!');
     }
-
     return this.booksRepository.save({ ...data, user });
   }
 
@@ -53,10 +53,14 @@ export class BooksService {
       .getOne();
   }
 
-  async getUserBooks(userId: number) {
+  async getUserBooks(userId: number, itemsPerPage?: number, page?: number) {
+    const skip = Number(page);
+    const take = Number(itemsPerPage);
     return (
       this.booksRepository
         .createQueryBuilder('book')
+        .take(take)
+        .skip(skip)
         .where('book.user = :user')
         .setParameter('user', userId)
         .leftJoinAndSelect('book.user', 'user')

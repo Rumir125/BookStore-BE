@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -24,14 +25,21 @@ export class BooksController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  public async getAllBooks(): Promise<Book[]> {
-    return this.booksService.findAll();
+  public async getAllBooks(
+    @Query('itemsPerPage') itemsPerPage,
+    @Query('page') page,
+  ): Promise<Book[]> {
+    return this.booksService.findAll(itemsPerPage, page);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('/user/:id')
-  public async getUserBooks(@Param('id') userId: any): Promise<Book[]> {
-    return this.booksService.getUserBooks(userId);
+  public async getUserBooks(
+    @Param('id') userId: any,
+    @Query('itemsPerPage') itemsPerPage,
+    @Query('page') page,
+  ): Promise<Book[]> {
+    return this.booksService.getUserBooks(userId, itemsPerPage, page);
   }
 
   @UseGuards(JwtAuthGuard)

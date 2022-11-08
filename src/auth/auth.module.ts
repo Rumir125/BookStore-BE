@@ -13,7 +13,7 @@ import { JwtStrategy } from './jwt.strategy';
     PassportModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET_KEY,
-      signOptions: { expiresIn: '600m' },
+      signOptions: { expiresIn: process.env.JWT_EXPIRE_TIME },
     }),
   ],
   providers: [AuthService, JwtStrategy],
